@@ -9,6 +9,14 @@ let deck = [];
 const tipos = ['C', 'D', 'H', 'S'];
 const especiales = ['A', 'J', 'Q', 'K'];
 
+let puntosJugador = 0,
+    puntosComputadora = 0;
+
+// Referencias de HTML
+const btnPedir = document.querySelector('#btnPedir');
+const divCartasJugador = document.querySelector('#jugador-cartas');
+const ptosHTML = document.querySelectorAll('small');
+
 // Crea un nuevo deck o baraja
 const crearDeck = () => {
 
@@ -24,7 +32,7 @@ const crearDeck = () => {
         }
     }
 
-    deck = _.shuffle(deck);
+    deck = _.shuffle(deck);    
     console.log(deck);
     
     return deck;
@@ -43,9 +51,28 @@ const pedirCarta = () => {
     }
     const carta = deck.pop();
 
-    console.log(deck);
-    console.log(carta); //Cara debe de ser de la baraja
     return carta;
 }
 
-pedirCarta();
+
+const valorCarta = ( carta ) => {
+    
+    const valor = carta.substring(0, carta.length - 1);
+    
+    return ( !isNaN(valor) ) ? valor * 1 
+            : ( valor === 'A' ) ? 11 : 10 ;
+}
+
+
+//Eventos
+btnPedir.addEventListener('click', () => {
+    
+    const carta = pedirCarta();
+    
+    puntosJugador = puntosJugador + valorCarta(carta);
+
+    ptosHTML[0].innerText = puntosJugador;
+
+    divCartasJugador.append();
+
+});
