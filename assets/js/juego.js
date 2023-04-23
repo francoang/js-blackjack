@@ -22,9 +22,16 @@
     const inicializarJuego = (numJugadores = 2) => {
         deck = crearDeck();
 
+        puntosJugadores = [];
         for (let i = 0; i < numJugadores; i++) {
             puntosJugadores.push(0);
         }
+
+        ptosHTML.forEach( elem => elem.innerText = 0 );
+        divCartasJugadores.forEach( elem => elem.innerHTML = '' );
+
+        btnPedir.disabled = false;
+        btnDetener.disabled = false;
     }
 
 
@@ -90,27 +97,34 @@
             const carta = pedirCarta();
             puntosComputadora = acumularPuntos(carta, posCompu);
             crearCarta(carta, posCompu);
+            
+            if(puntosMinimos > 21 && puntosComputadora <= 21){
+                break;
+            }
 
         } while (puntosComputadora < puntosMinimos && puntosComputadora <= 21);
 
-        setTimeout(() => {
-            mensajeFinal(puntosMinimos, puntosComputadora);
-        }, 10);
+        determinarGanador();
     }
 
-    const mensajeFinal = (puntosMinimos, puntosComputadora) => {
-        if (puntosMinimos === puntosComputadora) {
-            alert('EMPATE');
-        } else if (puntosComputadora > 21 && puntosMinimos > 21) {
-            alert('AMBOS PIERDEN');
-        }
-        else if (puntosMinimos > 21) {
-            alert('La COMPUTADORA ganó la partida');
-        } else if (puntosComputadora > 21) {
-            alert('El JUGADOR ganó la partida');
-        } else {
-            alert('La COMPUTADORA ganó la partida');
-        }
+    const determinarGanador = () => {
+
+        const [puntosMinimos, puntosComputadora] = puntosJugadores;
+
+        setTimeout(() => {
+            if (puntosMinimos === puntosComputadora) {
+                alert('EMPATE');
+            } else if (puntosComputadora > 21 && puntosMinimos > 21) {
+                alert('AMBOS PIERDEN');
+            }
+            else if (puntosMinimos > 21) {
+                alert('La COMPUTADORA ganó la partida');
+            } else if (puntosComputadora > 21) {
+                alert('El JUGADOR ganó la partida');
+            } else {
+                alert('La COMPUTADORA ganó la partida');
+            }
+        }, 100);
     }
 
 
@@ -138,25 +152,13 @@
 
 
     btnDetener.addEventListener('click', () => {
-        btnPedir.disabled = true;
-        btnDetener.disabled = true;
-        turnoComputadora(puntosJugador);
+        btnPedir.disabled = true; 
+        btnDetener.disabled = true;        
+        turnoComputadora( puntosJugadores[0] );
     });
 
     btnNuevoJuego.addEventListener('click', () => {
-
         inicializarJuego();
-
-        // puntosJugador = 0;   
-        // puntosComputadora = 0;
-        // ptosHTML[0].innerText = 0;
-        // ptosHTML[1].innerText = 0;
-
-        // divCartasComputadora.innerHTML = '';
-        // divCartasJugador.innerHTML = '';
-
-        // btnPedir.disabled = false;
-        // btnDetener.disabled = false;
     });
 
 
